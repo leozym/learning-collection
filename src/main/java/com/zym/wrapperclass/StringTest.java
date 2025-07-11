@@ -226,7 +226,7 @@ public class StringTest {
 
 
         // 单线程性能测试
-        testSingleThreadPerformance();
+//        testSingleThreadPerformance();
 
         // 多线程并发测试
         testConcurrentPerformance();
@@ -377,19 +377,22 @@ public class StringTest {
         System.out.println("测试并发 " + type + "...");
 
         long totalTime = 0;
+
+        Appendable appendable;
+        if ("StringBuilder".equals(type)) {
+            appendable = new StringBuilder();
+        }else if ("StringBuffer".equals(type)) {
+            appendable = new StringBuffer();
+        }else {
+            throw new IllegalArgumentException("不支持的类型: " + type);
+        }
+
         for (int i = 0; i < ITERATIONS; i++) {
 
             ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
             long startTime = System.nanoTime();
 
-            Appendable appendable;
-            if ("StringBuilder".equals(type)) {
-                appendable = new StringBuilder();
-            }else if ("StringBuffer".equals(type)) {
-                appendable = new StringBuffer();
-            }else {
-                throw new IllegalArgumentException("不支持的类型: " + type);
-            }
+
 
             Runnable task;
             if ("StringBuilder".equals(type)) {
